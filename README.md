@@ -1,16 +1,6 @@
 # geo_fish
 
-A new Flutter project.
+iOS/Android flutter app
 
-## Getting Started
+Some time ago I found out how flutter is powerfull. I have decided to learn dart and this awesome framework by creating this app.  I would like to solve real problem, which I'm facing as a angler. The goal is to create an app where users will have possibility to track their catches by adding fishes to the database. Fish item will include photo, location and wheather conditions. Users will have a choice between sharing fish data between all users or  add it only to the private catalog. Pottentialy I would like to develop this app much further, by adding charts with statistics, filtering or even social media app facilities.
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
