@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "598204608555",
+    "project_id": "geo-fish-f60f2",
+    "storage_bucket": "geo-fish-f60f2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:598204608555:android:756a9f667ada7cc623ba6e",
+        "android_client_info": {
+          "package_name": "com.example.geo_fish"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "598204608555-7ml6juqtkoseuup97j1f486n86edf78g.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAKNWpiRMcept0RU8u8KPmg8WcEWn4jdYE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "598204608555-7ml6juqtkoseuup97j1f486n86edf78g.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
