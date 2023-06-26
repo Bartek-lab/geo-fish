@@ -1,14 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutterfire_ui/auth.dart';
-import 'package:geo_fish/fish_form.dart';
 
-import 'fish_list.dart';
-
-class Fish {
-  String name;
-  String size;
-  Fish({required this.name, required this.size});
-}
+import 'package:geo_fish/Screens/fish_form.dart';
+import '../Widgets/fish_list.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -34,16 +28,7 @@ class HomeScreen extends StatelessWidget {
                         Navigator.of(context).pop();
                       })
                     ],
-                    children: [
-                      const Divider(),
-                      Padding(
-                        padding: const EdgeInsets.all(2),
-                        child: AspectRatio(
-                          aspectRatio: 1,
-                          child: Image.asset('flutterfire_300x.png'),
-                        ),
-                      )
-                    ],
+                    children: [],
                   ),
                 ),
               );
@@ -53,7 +38,7 @@ class HomeScreen extends StatelessWidget {
         automaticallyImplyLeading: false,
       ),
       // body:
-      body: const MyStatefulWidget(),
+      body: const FishList(),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.of(context).push(

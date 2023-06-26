@@ -1,6 +1,7 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+
+import 'package:geo_fish/services.dart';
 
 class FishForm extends StatefulWidget {
   const FishForm({super.key});
@@ -11,7 +12,7 @@ class FishForm extends StatefulWidget {
 
 class _FishFormState extends State<FishForm> {
   final storage = FirebaseStorage.instance;
-
+  final _itemService = ItemService();
   final _formKey = GlobalKey<FormState>();
 
   final nameController = TextEditingController();
@@ -55,26 +56,7 @@ class _FishFormState extends State<FishForm> {
                     final name = nameController.text;
                     final size = sizeController.text;
 
-                    // addNewFish(nameController.text, sizeController.text);
-
-                    CollectionReference fishList =
-                        FirebaseFirestore.instance.collection('fishList');
-
-                    fishList
-                        .add({
-                          'name': name,
-                          'size': size,
-                        })
-                        .then((value) => ScaffoldMessenger.of(context)
-                            .showSnackBar(const SnackBar(
-                                content: Text(
-                                    "Congratulations! You added your fish to catalog!"),
-                                backgroundColor: Colors.lightGreen)))
-                        .catchError((error) => ScaffoldMessenger.of(context)
-                            .showSnackBar(const SnackBar(
-                                content: Text(
-                                    "Something went wrong! Please try again"),
-                                backgroundColor: Colors.lightGreen)));
+                    _itemService.addFish(name, size);
 
                     Navigator.of(context).pop();
                   },

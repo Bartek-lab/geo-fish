@@ -1,22 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
-class MyStatefulWidget extends StatefulWidget {
-  const MyStatefulWidget({super.key});
-
-  @override
-  State<MyStatefulWidget> createState() => _MyStatefulWidgetState();
-}
-
-class _MyStatefulWidgetState extends State<MyStatefulWidget> {
-  // CrudMedthods crudObj = CrudMedthods();
-
-  @override
-  Widget build(BuildContext context) {
-    return const FishList();
-  }
-}
-
 class FishList extends StatelessWidget {
   const FishList({super.key});
   @override
