@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
-import 'package:geo_fish/services.dart';
+import 'package:geo_fish/Services/item_services.dart';
 
 class FishForm extends StatefulWidget {
   const FishForm({super.key});

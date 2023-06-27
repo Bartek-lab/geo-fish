@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutterfire_ui/auth.dart';
+import 'package:geolocator/geolocator.dart';
 
-import 'package:geo_fish/Screens/fish_form.dart';
+import 'package:geo_fish/Services/geo_locator.dart';
 import '../Widgets/fish_list.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -9,7 +10,9 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // final Iterable<Fish> _fishes = crudObj.getData()
+    final geolocatorService = GeolocatorService();
+    Future<Position> currentPosition = geolocatorService.determinePosition();
+
     return Scaffold(
       appBar: AppBar(
         actions: [
@@ -28,7 +31,7 @@ class HomeScreen extends StatelessWidget {
                         Navigator.of(context).pop();
                       })
                     ],
-                    children: [],
+                    children: const [],
                   ),
                 ),
               );
@@ -40,12 +43,14 @@ class HomeScreen extends StatelessWidget {
       // body:
       body: const FishList(),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (context) => const FishForm(),
-            ),
-          );
+        onPressed: () async {
+          print(await currentPosition);
+
+          // Navigator.of(context).push(
+          //   MaterialPageRoute(
+          //     builder: (context) => const FishForm(),
+          //   ),
+          // );
         },
         backgroundColor: Colors.green,
         child: const Icon(
