@@ -1,7 +1,13 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
 import 'package:geo_fish/Services/item_services.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+
+import '../Widgets/google_map.dart';
 
 class FishForm extends StatefulWidget {
   const FishForm({super.key});
@@ -17,6 +23,11 @@ class _FishFormState extends State<FishForm> {
 
   final nameController = TextEditingController();
   final sizeController = TextEditingController();
+  @override
+  void initState() {
+    super.initState();
+    GeolocatorPlatform.instance.requestPermission();
+  }
 
   @override
   void dispose() {
@@ -50,6 +61,13 @@ class _FishFormState extends State<FishForm> {
                   controller: sizeController,
                   keyboardType: TextInputType.number,
                 ),
+              ),
+              const SizedBox(
+                height: 350,
+                width: 400,
+                child: GoogleMap(
+                    initialCameraPosition: CameraPosition(target: LatLng(0, 0)),
+                    myLocationEnabled: true),
               ),
               ElevatedButton(
                   onPressed: () {
