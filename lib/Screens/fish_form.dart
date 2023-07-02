@@ -1,13 +1,10 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
-import 'package:firebase_storage/firebase_storage.dart';
-
-import 'package:geo_fish/Services/item_services.dart';
-import 'package:geolocator/geolocator.dart';
+import 'package:geo_fish/Widgets/image_upload.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
-import '../Widgets/google_map.dart';
+import 'package:geo_fish/Services/item_services.dart';
+import 'package:geo_fish/Services/geo_locator.dart';
 
 class FishForm extends StatefulWidget {
   const FishForm({super.key});
@@ -17,16 +14,24 @@ class FishForm extends StatefulWidget {
 }
 
 class _FishFormState extends State<FishForm> {
-  final storage = FirebaseStorage.instance;
   final _itemService = ItemService();
   final _formKey = GlobalKey<FormState>();
+  final Completer<GoogleMapController> _mapController =
+      Completer<GoogleMapController>();
+  LatLng? _markerPosition;
+
+  // _FishFormState(this._currentPosition);
 
   final nameController = TextEditingController();
   final sizeController = TextEditingController();
+
   @override
   void initState() {
     super.initState();
-    GeolocatorPlatform.instance.requestPermission();
+    GeolocatorService().determinePosition().then((value) => setState(() {
+          _markerPosition = LatLng(value.latitude, value.longitude);
+          // _currentPosition = value;
+        }));
   }
 
   @override
@@ -42,43 +47,79 @@ class _FishFormState extends State<FishForm> {
         appBar: AppBar(),
         body: Form(
             key: _formKey,
-            child: Column(children: <Widget>[
-              InputDecorator(
-                decoration: const InputDecoration(
-                  hintText: 'Enter a fish name',
-                  labelText: 'Fish',
-                ),
-                child: TextFormField(
-                  controller: nameController,
-                ),
-              ),
-              InputDecorator(
-                decoration: const InputDecoration(
-                  labelText: 'Size',
-                  hintText: 'Enter a fish Size',
-                ),
-                child: TextFormField(
-                  controller: sizeController,
-                  keyboardType: TextInputType.number,
-                ),
-              ),
-              const SizedBox(
-                height: 350,
-                width: 400,
-                child: GoogleMap(
-                    initialCameraPosition: CameraPosition(target: LatLng(0, 0)),
-                    myLocationEnabled: true),
-              ),
-              ElevatedButton(
-                  onPressed: () {
-                    final name = nameController.text;
-                    final size = sizeController.text;
+            child: SingleChildScrollView(
+                child: SizedBox(
+                    height: 2000,
+                    child: Column(
+                        verticalDirection: VerticalDirection.down,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: <Widget>[
+                          InputDecorator(
+                            decoration: const InputDecoration(
+                              hintText: 'Enter a fish name',
+                              labelText: 'Fish',
+                            ),
+                            child: TextFormField(
+                              controller: nameController,
+                            ),
+                          ),
+                          InputDecorator(
+                            decoration: const InputDecoration(
+                              labelText: 'Size',
+                              hintText: 'Enter a fish Size',
+                            ),
+                            child: TextFormField(
+                              controller: sizeController,
+                              keyboardType: TextInputType.number,
+                            ),
+                          ),
+                          SizedBox(
+                            height: 350,
+                            width: 420,
+                            child: GoogleMap(
+                                // zoomGesturesEnabled: true,
+                                mapType: MapType.satellite,
+                                initialCameraPosition: CameraPosition(
+                                    target: _markerPosition!, zoom: 15.0),
+                                myLocationEnabled: true,
+                                onMapCreated: (GoogleMapController controller) {
+                                  _mapController.complete(controller);
+                                },
+                                onLongPress: (position) {
+                                  setState(() {
+                                    _markerPosition = position;
+                                  });
+                                },
+                                markers: {
+                                  Marker(
+                                    markerId: const MarkerId("marker1"),
+                                    position: _markerPosition!,
+                                    draggable: true,
+                                    onDragEnd: (value) {
+                                      print(value);
+                                      setState(() {
+                                        _markerPosition = value;
+                                      });
+                                    },
+                                  )
+                                }),
+                          ),
+                          ImageUpload(),
+                          ElevatedButton(
+                              onPressed: () {
+                                final name = nameController.text;
+                                final size = sizeController.text;
 
-                    _itemService.addFish(name, size);
+                                final position = {
+                                  'lat': _markerPosition!.latitude,
+                                  'lng': _markerPosition!.longitude
+                                };
 
-                    Navigator.of(context).pop();
-                  },
-                  child: const Text("Add Fish")),
-            ])));
+                                _itemService.addFish(name, size, position);
+
+                                // Navigator.of(context).pop();
+                              },
+                              child: const Text("Add Fish")),
+                        ])))));
   }
 }
