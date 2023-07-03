@@ -1,13 +1,15 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:geo_fish/Widgets/image_upload.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import 'package:geo_fish/Services/item_services.dart';
 import 'package:geo_fish/Services/geo_locator.dart';
+import 'package:image_picker/image_picker.dart';
 
 class FishForm extends StatefulWidget {
-  const FishForm({super.key});
+  const FishForm({super.key, required this.uploadedImageUrl});
+
+  final String uploadedImageUrl;
 
   @override
   State<FishForm> createState() => _FishFormState();
@@ -18,7 +20,7 @@ class _FishFormState extends State<FishForm> {
   final _formKey = GlobalKey<FormState>();
   final Completer<GoogleMapController> _mapController =
       Completer<GoogleMapController>();
-  LatLng? _markerPosition;
+  late LatLng _markerPosition;
 
   // _FishFormState(this._currentPosition);
 
@@ -30,7 +32,6 @@ class _FishFormState extends State<FishForm> {
     super.initState();
     GeolocatorService().determinePosition().then((value) => setState(() {
           _markerPosition = LatLng(value.latitude, value.longitude);
-          // _currentPosition = value;
         }));
   }
 
@@ -49,7 +50,7 @@ class _FishFormState extends State<FishForm> {
             key: _formKey,
             child: SingleChildScrollView(
                 child: SizedBox(
-                    height: 2000,
+                    height: 800,
                     child: Column(
                         verticalDirection: VerticalDirection.down,
                         crossAxisAlignment: CrossAxisAlignment.center,
@@ -80,7 +81,7 @@ class _FishFormState extends State<FishForm> {
                                 // zoomGesturesEnabled: true,
                                 mapType: MapType.satellite,
                                 initialCameraPosition: CameraPosition(
-                                    target: _markerPosition!, zoom: 15.0),
+                                    target: _markerPosition, zoom: 15.0),
                                 myLocationEnabled: true,
                                 onMapCreated: (GoogleMapController controller) {
                                   _mapController.complete(controller);
@@ -96,7 +97,6 @@ class _FishFormState extends State<FishForm> {
                                     position: _markerPosition!,
                                     draggable: true,
                                     onDragEnd: (value) {
-                                      print(value);
                                       setState(() {
                                         _markerPosition = value;
                                       });
@@ -104,15 +104,14 @@ class _FishFormState extends State<FishForm> {
                                   )
                                 }),
                           ),
-                          ImageUpload(),
                           ElevatedButton(
                               onPressed: () {
                                 final name = nameController.text;
                                 final size = sizeController.text;
-
+                                print(widget.uploadedImageUrl);
                                 final position = {
-                                  'lat': _markerPosition!.latitude,
-                                  'lng': _markerPosition!.longitude
+                                  'lat': _markerPosition.latitude,
+                                  'lng': _markerPosition.longitude
                                 };
 
                                 _itemService.addFish(name, size, position);
