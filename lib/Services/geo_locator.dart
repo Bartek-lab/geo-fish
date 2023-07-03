@@ -3,17 +3,6 @@ import 'dart:async';
 import 'package:geolocator/geolocator.dart';
 
 class GeolocatorService {
-  // final LocationSettings locationSettings = const LocationSettings(
-  //   accuracy: LocationAccuracy.high,
-  //   distanceFilter: 100,
-  // );
-  // StreamSubscription<Position> positionStream =
-  //     Geolocator.getPositionStream(locationSettings: locationSettings)
-  //         .listen((Position? position) {
-  //   print(position == null
-  //       ? 'Unknown'
-  //       : '${position.latitude.toString()}, ${position.longitude.toString()}');
-  // });
   Future<Position> determinePosition() async {
     bool serviceEnabled;
     LocationPermission permission;
