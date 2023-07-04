@@ -4,7 +4,6 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import 'package:geo_fish/Services/item_services.dart';
 import 'package:geo_fish/Services/geo_locator.dart';
-import 'package:image_picker/image_picker.dart';
 
 class FishForm extends StatefulWidget {
   const FishForm({super.key, required this.uploadedImageUrl});
@@ -50,7 +49,7 @@ class _FishFormState extends State<FishForm> {
             key: _formKey,
             child: SingleChildScrollView(
                 child: SizedBox(
-                    height: 800,
+                    height: 1500,
                     child: Column(
                         verticalDirection: VerticalDirection.down,
                         crossAxisAlignment: CrossAxisAlignment.center,
@@ -77,6 +76,16 @@ class _FishFormState extends State<FishForm> {
                           SizedBox(
                             height: 350,
                             width: 420,
+                            child: widget.uploadedImageUrl != "" &&
+                                    widget.uploadedImageUrl != "badUrl"
+                                ? Image.network(
+                                    widget.uploadedImageUrl,
+                                  )
+                                : const CircularProgressIndicator(),
+                          ),
+                          SizedBox(
+                            height: 350,
+                            width: 420,
                             child: GoogleMap(
                                 // zoomGesturesEnabled: true,
                                 mapType: MapType.satellite,
@@ -94,7 +103,7 @@ class _FishFormState extends State<FishForm> {
                                 markers: {
                                   Marker(
                                     markerId: const MarkerId("marker1"),
-                                    position: _markerPosition!,
+                                    position: _markerPosition,
                                     draggable: true,
                                     onDragEnd: (value) {
                                       setState(() {
@@ -108,15 +117,15 @@ class _FishFormState extends State<FishForm> {
                               onPressed: () {
                                 final name = nameController.text;
                                 final size = sizeController.text;
-                                print(widget.uploadedImageUrl);
                                 final position = {
                                   'lat': _markerPosition.latitude,
                                   'lng': _markerPosition.longitude
                                 };
 
-                                _itemService.addFish(name, size, position);
+                                _itemService.addFish(name, size, position,
+                                    widget.uploadedImageUrl);
 
-                                // Navigator.of(context).pop();
+                                Navigator.of(context).pop();
                               },
                               child: const Text("Add Fish")),
                         ])))));
