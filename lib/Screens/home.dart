@@ -1,17 +1,14 @@
-import 'dart:io';
-
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterfire_ui/auth.dart';
-import 'package:image_picker/image_picker.dart';
+import 'package:geo_fish/Services/image_services.dart';
 
 import '../Widgets/fish_list.dart';
 import 'fish_form.dart';
 
 class HomeScreen extends StatelessWidget {
-  HomeScreen({super.key});
+  const HomeScreen({super.key});
 
-  String uploadedImageUrl = "";
+  final String uploadedImageUrl = "";
 
   @override
   Widget build(BuildContext context) {
@@ -46,39 +43,12 @@ class HomeScreen extends StatelessWidget {
       body: const FishList(),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
-          // print(await currentPosition);
-          //TODO
-          // final navigator = Navigator.of(context);
+          final navigator = Navigator.of(context);
 
-          XFile? photo =
-              await ImagePicker().pickImage(source: ImageSource.camera);
-          print('${photo?.path}');
-
-          if (photo == null) return;
-
-          String imageId = DateTime.now().millisecondsSinceEpoch.toString();
-
-          Reference firestorageImages =
-              FirebaseStorage.instance.ref().child('images');
-
-          Reference uploadedImage = firestorageImages.child(imageId);
-
-          try {
-            uploadedImage.putFile(File(photo.path));
-            uploadedImageUrl = await uploadedImage.getDownloadURL();
-
-            print(uploadedImageUrl);
-          } catch (error) {
-            print(error);
-          }
-
-          // navigator.push(
-          //   MaterialPageRoute(
-          //     builder: (context) => FishForm(
-          //       uploadedImageUrl: uploadedImageUrl,
-          //     ),
-          //   ),
-          // );
+          ImageService().takePicture().then((url) => navigator.push(
+                MaterialPageRoute(
+                    builder: (context) => FishForm(uploadedImageUrl: url)),
+              ));
         },
         backgroundColor: Colors.green,
         child: const Icon(
