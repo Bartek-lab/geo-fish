@@ -1,18 +1,14 @@
-import 'dart:io';
-
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterfire_ui/auth.dart';
 import 'package:geo_fish/Services/image_services.dart';
-import 'package:image_picker/image_picker.dart';
 
 import '../Widgets/fish_list.dart';
 import 'fish_form.dart';
 
 class HomeScreen extends StatelessWidget {
-  HomeScreen({super.key});
+  const HomeScreen({super.key});
 
-  String uploadedImageUrl = "";
+  final String uploadedImageUrl = "";
 
   @override
   Widget build(BuildContext context) {

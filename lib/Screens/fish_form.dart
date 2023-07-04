@@ -1,9 +1,8 @@
-import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
-
-import 'package:geo_fish/Services/item_services.dart';
 import 'package:geo_fish/Services/geo_locator.dart';
+import 'package:geo_fish/Services/item_services.dart';
+import 'package:geo_fish/Widgets/google_map.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class FishForm extends StatefulWidget {
   const FishForm({super.key, required this.uploadedImageUrl});
@@ -17,14 +16,17 @@ class FishForm extends StatefulWidget {
 class _FishFormState extends State<FishForm> {
   final _itemService = ItemService();
   final _formKey = GlobalKey<FormState>();
-  final Completer<GoogleMapController> _mapController =
-      Completer<GoogleMapController>();
-  late LatLng _markerPosition;
 
-  // _FishFormState(this._currentPosition);
+  late LatLng _markerPosition;
 
   final nameController = TextEditingController();
   final sizeController = TextEditingController();
+
+  void changeMarkerPostion(value) {
+    setState(() {
+      _markerPosition = value;
+    });
+  }
 
   @override
   void initState() {
@@ -49,69 +51,70 @@ class _FishFormState extends State<FishForm> {
             key: _formKey,
             child: SingleChildScrollView(
                 child: SizedBox(
-                    height: 1500,
+                    height: 1000,
                     child: Column(
                         verticalDirection: VerticalDirection.down,
-                        crossAxisAlignment: CrossAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        // crossAxisAlignment: CrossAxisAlignment.center,
                         children: <Widget>[
-                          InputDecorator(
-                            decoration: const InputDecoration(
-                              hintText: 'Enter a fish name',
-                              labelText: 'Fish',
-                            ),
-                            child: TextFormField(
+                          Container(
+                            margin: const EdgeInsets.only(
+                                left: 5, top: 15, right: 5, bottom: 10),
+                            child: TextField(
+                              decoration: InputDecoration(
+                                  labelText: "Fish Name",
+                                  filled: true,
+                                  fillColor: Colors.blue.shade100,
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                    borderSide: BorderSide.none,
+                                  )),
                               controller: nameController,
                             ),
                           ),
-                          InputDecorator(
-                            decoration: const InputDecoration(
-                              labelText: 'Size',
-                              hintText: 'Enter a fish Size',
-                            ),
-                            child: TextFormField(
+                          Container(
+                            margin: const EdgeInsets.only(
+                                left: 5, top: 10, right: 5, bottom: 10),
+                            child: TextField(
+                              decoration: InputDecoration(
+                                  labelText: "Size",
+                                  filled: true,
+                                  fillColor: Colors.blue.shade100,
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                    borderSide: BorderSide.none,
+                                  )),
                               controller: sizeController,
-                              keyboardType: TextInputType.number,
                             ),
                           ),
-                          SizedBox(
-                            height: 350,
-                            width: 420,
-                            child: widget.uploadedImageUrl != "" &&
-                                    widget.uploadedImageUrl != "badUrl"
-                                ? Image.network(
-                                    widget.uploadedImageUrl,
-                                  )
-                                : const CircularProgressIndicator(),
+                          Container(
+                            margin: const EdgeInsets.only(
+                                left: 5, top: 10, right: 5, bottom: 10),
+                            child: ClipRRect(
+                                borderRadius: const BorderRadius.only(
+                                    topLeft: Radius.circular(10),
+                                    topRight: Radius.circular(10),
+                                    bottomLeft: Radius.circular(10),
+                                    bottomRight: Radius.circular(10)),
+                                child: Image.network(
+                                  widget.uploadedImageUrl,
+                                  loadingBuilder:
+                                      (context, child, loadingProgress) {
+                                    if (loadingProgress == null) {
+                                      return child;
+                                    } else {
+                                      return const Center(
+                                        child: CircularProgressIndicator(),
+                                      );
+                                    }
+                                  },
+                                  height: 180,
+                                  fit: BoxFit.fill,
+                                )),
                           ),
-                          SizedBox(
-                            height: 350,
-                            width: 420,
-                            child: GoogleMap(
-                                // zoomGesturesEnabled: true,
-                                mapType: MapType.satellite,
-                                initialCameraPosition: CameraPosition(
-                                    target: _markerPosition, zoom: 15.0),
-                                myLocationEnabled: true,
-                                onMapCreated: (GoogleMapController controller) {
-                                  _mapController.complete(controller);
-                                },
-                                onLongPress: (position) {
-                                  setState(() {
-                                    _markerPosition = position;
-                                  });
-                                },
-                                markers: {
-                                  Marker(
-                                    markerId: const MarkerId("marker1"),
-                                    position: _markerPosition,
-                                    draggable: true,
-                                    onDragEnd: (value) {
-                                      setState(() {
-                                        _markerPosition = value;
-                                      });
-                                    },
-                                  )
-                                }),
+                          Map(
+                            markerPosition: _markerPosition,
+                            setMarkerValue: changeMarkerPostion,
                           ),
                           ElevatedButton(
                               onPressed: () {

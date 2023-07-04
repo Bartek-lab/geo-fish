@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:geo_fish/Widgets/fish_item.dart';
 
 class FishList extends StatelessWidget {
   const FishList({super.key});
@@ -12,17 +13,12 @@ class FishList extends StatelessWidget {
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           return ListView.builder(
-            scrollDirection: Axis.vertical,
-            itemCount: snapshot.data!.docs.length,
-            itemBuilder: (context, index) {
-              var data = snapshot.data!.docs[index];
-
-              return ListTile(
-                title: Text(data['name']),
-                subtitle: Text(data['size']),
-              );
-            },
-          );
+              scrollDirection: Axis.vertical,
+              itemCount: snapshot.data!.docs.length,
+              itemBuilder: (context, index) {
+                var data = snapshot.data!.docs[index];
+                return FishItem(data);
+              });
         }
         return const CircularProgressIndicator();
       },
