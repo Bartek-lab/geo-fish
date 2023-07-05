@@ -4,8 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class Map extends StatefulWidget {
-  Map({setMarkerValue, required this.markerPosition, super.key});
+  Map({
+    setMarkerValue,
+    required this.readOnly,
+    required this.markerPosition,
+    super.key,
+  });
   LatLng markerPosition;
+  bool readOnly;
   @override
   State<Map> createState() => _MapState();
 }
@@ -40,6 +46,7 @@ class _MapState extends State<Map> {
               _mapController.complete(controller);
             },
             onLongPress: (position) {
+              if (widget.readOnly) return;
               setState(() {
                 widget.markerPosition = position;
               });
