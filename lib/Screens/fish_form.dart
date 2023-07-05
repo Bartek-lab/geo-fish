@@ -5,7 +5,10 @@ import 'package:geo_fish/Widgets/google_map.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class FishForm extends StatefulWidget {
-  const FishForm({super.key, required this.uploadedImageUrl});
+  const FishForm({
+    super.key,
+    required this.uploadedImageUrl,
+  });
 
   final String uploadedImageUrl;
 
@@ -115,6 +118,7 @@ class _FishFormState extends State<FishForm> {
                           Map(
                             markerPosition: _markerPosition,
                             setMarkerValue: changeMarkerPostion,
+                            readOnly: false,
                           ),
                           ElevatedButton(
                               onPressed: () {
