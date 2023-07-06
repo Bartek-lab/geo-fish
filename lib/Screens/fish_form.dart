@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:geo_fish/Services/geo_locator.dart';
 import 'package:geo_fish/Services/item_services.dart';
@@ -21,6 +22,7 @@ class _FishFormState extends State<FishForm> {
   final _formKey = GlobalKey<FormState>();
 
   late LatLng _markerPosition;
+  String _currentUserId = "";
 
   final nameController = TextEditingController();
   final sizeController = TextEditingController();
@@ -37,6 +39,10 @@ class _FishFormState extends State<FishForm> {
     GeolocatorService().determinePosition().then((value) => setState(() {
           _markerPosition = LatLng(value.latitude, value.longitude);
         }));
+
+    setState(() {
+      _currentUserId = FirebaseAuth.instance.currentUser!.uid;
+    });
   }
 
   @override
@@ -129,8 +135,14 @@ class _FishFormState extends State<FishForm> {
                                   'lng': _markerPosition.longitude
                                 };
 
-                                _itemService.addFish(name, size, position,
-                                    widget.uploadedImageUrl);
+                                _itemService.addFish(
+                                  name,
+                                  size,
+                                  position,
+                                  _currentUserId,
+                                  false,
+                                  widget.uploadedImageUrl,
+                                );
 
                                 Navigator.of(context).pop();
                               },

@@ -9,5 +9,6 @@ class Fish {
   final String size;
   final UserLocation position;
   final String imageUrl;
+
   Fish(this.imageUrl, this.name, this.size, this.position);
 }

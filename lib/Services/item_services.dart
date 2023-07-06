@@ -8,12 +8,14 @@ class ItemService {
       FirebaseFirestore.instance.collection('fishList');
 
   Future<void> addFish(String name, String size, Map<String, double> position,
-      String imageUrl) async {
+      String author, bool isSharedOnMainList, String imageUrl) async {
     fishList.add({
       'name': name,
       'size': size,
       'position': position,
-      'imageUrl': imageUrl
+      'imageUrl': imageUrl,
+      'author': author,
+      'isSharedOnMainList': false
     }).then((value) {
       const SnackBar snackBar = SnackBar(
           backgroundColor: Colors.lightGreen,
