@@ -13,17 +13,16 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-        length: 3,
+        length: 2,
         child: Scaffold(
           appBar: AppBar(
             bottom: const TabBar(
               tabs: [
-                Tab(icon: Icon(Icons.directions_car)),
-                Tab(icon: Icon(Icons.directions_transit)),
-                Tab(icon: Icon(Icons.directions_bike)),
+                Tab(text: "Main List"),
+                Tab(text: "Private List"),
               ],
             ),
-            title: const Text('Tabs Demo'),
+            title: const Text('Fish Tracker'),
             actions: [
               IconButton(
                 icon: const Icon(Icons.person),
@@ -52,9 +51,8 @@ class HomeScreen extends StatelessWidget {
           // body:
           body: const TabBarView(
             children: [
-              const FishList(),
-              const FishList(private: true),
-              Icon(Icons.directions_bike),
+              FishList(isGlobal: true),
+              FishList(isGlobal: false),
             ],
           ),
           floatingActionButton: FloatingActionButton(
