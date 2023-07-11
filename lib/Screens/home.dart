@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutterfire_ui/auth.dart';
 import 'package:geo_fish/Services/image_services.dart';
 
-import '../Widgets/fish_list.dart';
+import '../Widgets/fish_list_main.dart';
+import '../Widgets/fish_list_private.dart';
 import 'fish_form.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -51,8 +52,8 @@ class HomeScreen extends StatelessWidget {
           // body:
           body: const TabBarView(
             children: [
-              FishList(isSharedOnMainList: true),
-              FishList(isSharedOnMainList: false),
+              MainFishList(),
+              PrivateFishList(),
             ],
           ),
           floatingActionButton: FloatingActionButton(
