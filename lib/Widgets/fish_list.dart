@@ -4,14 +4,18 @@ import 'package:flutter/material.dart';
 import 'package:geo_fish/Widgets/fish_item.dart';
 
 class FishList extends StatefulWidget {
-  const FishList({required isGlobal, super.key});
-
+  const FishList({
+    required this.isSharedOnMainList,
+    super.key,
+  });
+  final bool isSharedOnMainList;
   @override
   State<FishList> createState() => _FishListState();
 }
 
 class _FishListState extends State<FishList> {
   String currentUserId = "";
+
   @override
   void initState() {
     super.initState();
@@ -21,17 +25,16 @@ class _FishListState extends State<FishList> {
     });
   }
 
-  bool isGlobal = true;
   @override
   Widget build(BuildContext context) {
     final CollectionReference collectionRef =
         FirebaseFirestore.instance.collection('fishList');
-
+    print(widget.isSharedOnMainList);
     return StreamBuilder(
       //TODO distingush list  -> author
       stream: collectionRef
-          .where("author", isEqualTo: currentUserId)
-          .where("isSharedOnMainList", isEqualTo: !isGlobal)
+          // .where("author", isEqualTo: currentUserId)
+          .where("isSharedOnMainList", isEqualTo: widget.isSharedOnMainList)
           .snapshots(),
       builder: (context, snapshot) {
         if (snapshot.hasData) {

@@ -51,8 +51,8 @@ class HomeScreen extends StatelessWidget {
           // body:
           body: const TabBarView(
             children: [
-              FishList(isGlobal: true),
-              FishList(isGlobal: false),
+              FishList(isSharedOnMainList: true),
+              FishList(isSharedOnMainList: false),
             ],
           ),
           floatingActionButton: FloatingActionButton(

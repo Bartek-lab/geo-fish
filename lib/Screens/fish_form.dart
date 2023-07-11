@@ -22,7 +22,8 @@ class _FishFormState extends State<FishForm> {
   final _formKey = GlobalKey<FormState>();
 
   late LatLng _markerPosition;
-  String _currentUserId = "";
+  String currentUserId = "";
+  bool isSharedOnMainList = false;
 
   final nameController = TextEditingController();
   final sizeController = TextEditingController();
@@ -41,7 +42,7 @@ class _FishFormState extends State<FishForm> {
         }));
 
     setState(() {
-      _currentUserId = FirebaseAuth.instance.currentUser!.uid;
+      currentUserId = FirebaseAuth.instance.currentUser!.uid;
     });
   }
 
@@ -99,6 +100,28 @@ class _FishFormState extends State<FishForm> {
                           Container(
                             margin: const EdgeInsets.only(
                                 left: 5, top: 10, right: 5, bottom: 10),
+                            child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  const Text("Share fish for all users:"),
+                                  Switch(
+                                    value: isSharedOnMainList,
+                                    thumbColor:
+                                        const MaterialStatePropertyAll<Color>(
+                                            Colors.blueGrey),
+                                    onChanged: (bool value) {
+                                      setState(() {
+                                        isSharedOnMainList = value;
+                                        print(value);
+                                      });
+                                    },
+                                  ),
+                                ]),
+                          ),
+                          Container(
+                            margin: const EdgeInsets.only(
+                                left: 5, top: 10, right: 5, bottom: 10),
                             child: ClipRRect(
                                 borderRadius: const BorderRadius.only(
                                     topLeft: Radius.circular(10),
@@ -128,6 +151,7 @@ class _FishFormState extends State<FishForm> {
                           ),
                           ElevatedButton(
                               onPressed: () {
+                                print(isSharedOnMainList);
                                 final name = nameController.text;
                                 final size = sizeController.text;
                                 final position = {
@@ -139,8 +163,8 @@ class _FishFormState extends State<FishForm> {
                                   name,
                                   size,
                                   position,
-                                  _currentUserId,
-                                  false,
+                                  currentUserId,
+                                  isSharedOnMainList,
                                   widget.uploadedImageUrl,
                                 );
 
