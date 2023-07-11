@@ -15,7 +15,7 @@ class ItemService {
       'position': position,
       'imageUrl': imageUrl,
       'author': author,
-      'isSharedOnMainList': false
+      'isSharedOnMainList': isSharedOnMainList
     }).then((value) {
       const SnackBar snackBar = SnackBar(
           backgroundColor: Colors.lightGreen,
